@@ -29,8 +29,16 @@
         <hr>
 
         <section id="main_content">
+        <p>Posts</p>
+        <ul>
+        {% for post in site.posts %}
+          <li>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+        </ul>
 
-<p><a href="http://library.duke.edu/about/depts/repositoryservices/">Digital Repository Services</a></p>
+        <p><a href="http://library.duke.edu/about/depts/repositoryservices/">Digital Repository Services</a></p>
         </section>
 
         <footer>
