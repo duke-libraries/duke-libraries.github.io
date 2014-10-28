@@ -1,8 +1,6 @@
 ---
-layout: default
+layout: post
 title: Extracting ddr-models
+author: David Chandek-Stark
 ---
-
-# Extracting ddr-models
-
 
