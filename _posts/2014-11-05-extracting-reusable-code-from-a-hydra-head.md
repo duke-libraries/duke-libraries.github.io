@@ -15,7 +15,7 @@ In recent months we have begun planning for at least two additional Hydra heads.
 
 Following the typical Rails app development pattern, we originally put our repository models in `app/models`, not namespaced.  This created two issues:
 
-- We couldn't easily namespace the models on refactoring (e.g., from `Component` to `Ddr::Models::Component`) without touching every object in the repository.
+- We couldn't namespace the models on refactoring (e.g., from `Component` to `Ddr::Models::Component`) without touching every object in the repository, which we didn't want to do.
 
 - We learned that `app/models` is not a magic path in a Rails engine (more on engines later), which affects Rails autoloading, etc., so we explicitly required each module:
 
