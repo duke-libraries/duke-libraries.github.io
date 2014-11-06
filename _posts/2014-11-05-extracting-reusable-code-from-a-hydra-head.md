@@ -63,7 +63,7 @@ end
 
 ### Custom Predicates
 
-ActiveFedora provides that custom predicates for RELS-EXT relations (FC3) can be added to file at `config/predicate_mappings.yml`.  Unfortunately, this file apparently must be read when `ActiveFedora::Predicates` first loads or it has no effect.  Fortunately you can use `ActiveFedora::Predicates.set_predicates(mapping)` to add predicates later.  So, back in the Rails engine module, we created an initializer:
+ActiveFedora provides that custom predicates for RELS-EXT relations (FC3) can be added to a file at `config/predicate_mappings.yml`.  Unfortunately, this file apparently must be read when `ActiveFedora::Predicates` first loads or it has no effect.  Fortunately, you can use `ActiveFedora::Predicates.set_predicates(mapping)` to add predicates later.  So, back in the Rails engine module, we created an initializer:
 
 {% highlight ruby %}
 initializer 'ddr_models.predicates' do
@@ -137,4 +137,4 @@ Of course, some things only come with experience ... but here some observations.
 
 - Good quality tests are critical when making extensive organizational changes.  I'm still learning how to write good ones and avoid bad and unnecessary tests.
 
-- Unless you got way more git-fu that I, you may want to freeze development on (or at least the relevant parts of) the original app while you're extracting code.  I didn't want to think about how I was going to deal with merge conflicts and applying patches across projects.
+- Unless you've got way more git-fu that I, you may want to freeze development on (or at least the relevant parts of) the original app while you're extracting code.  I didn't want to think about how I was going to deal with merge conflicts and applying patches across projects.
