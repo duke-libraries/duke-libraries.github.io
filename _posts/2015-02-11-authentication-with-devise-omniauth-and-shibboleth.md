@@ -35,7 +35,7 @@ Initially, to deal the public access case I attempted to modify devise-remote-us
 
 - Override the Devise SessionsController to automatically route authentication to omniauth-shibboleth when required. This way we can use the standard `new_user_session_path` helper in views, keeping the branching logic in the controller.
 
-{% highlight ruby linenos %}
+{% highlight ruby %}
 class Users::SessionsController < Devise::SessionsController
 
   def new
