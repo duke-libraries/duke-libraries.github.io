@@ -41,7 +41,8 @@ class Users::SessionsController < Devise::SessionsController
   def new
     store_location_for(:user, request.referrer) # return to previous page after authn
     if Ddr::Auth.require_shib_user_authn
-      # don't want the "sign in or sign up" flash in this case
+      # don't want the "sign in or sign up" flash alert
+      # which is set by the Devise failure app
       flash.discard(:alert)
       redirect_to user_omniauth_authorize_path(:shibboleth)
     else
