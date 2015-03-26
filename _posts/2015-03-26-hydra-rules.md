@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Hydra Rules: Thoughts on Software Development Practices"
+title: "Hydra Rules: Thoughts on Community Software Development Practices"
 author: David Chandek-Stark
 ---
 
