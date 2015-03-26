@@ -4,6 +4,8 @@ title: "Hydra Rules: Thoughts on Community Software Development Practices"
 author: David Chandek-Stark
 ---
 
+**Disclaimer:** Don't bother looking at my code to see if it's consistent with the suggestions made here.  It isn't.  I'm still learning.
+
 ### Why do we need rules for community software development?
 
 If you haven't seen [Sandi Metz's talk on Rules](https://youtu.be/npOGOmkxuio), stop reading and watch it.
@@ -31,4 +33,6 @@ Rather than chunking out pieces of classes, we should instead think about breaki
 
 I finally decided to write this article after reading Jeremy Friesen's fine presentation, ["Accepting Application Ownership"](https://docs.google.com/presentation/d/1TvjNVuQyEOwrITIgcd7J2HMV5BvgG-XRqqGGVtrW4tY/edit?usp=sharing). His text mentions "inconsistent styles and idioms" as factors in making apps expensive because of the "higher code-orientation cost".  To that observation I would add that community-developed software such as Hydra can evolve in a way -- hard to understand and test -- that makes the cost of contribution prohibitively high for many developers who have only slivers of time to devote to such efforts.  Therefore, the community as a whole benefits from adopting principles that foster more readable code that is easier to modify and extend.  I suspect most folks would agree with that statement in theory, but in practice we tend to be more focused (and not without good reason) at the micro level of immediate functional goals -- or, concretely, pull requests.
 
-My point is that the programming culture of the community -- our de facto practices -- matter.  We all want the functionality of the software.  But we also have to use, maintain, modify and extend it to meet new needs and our coding patterns determine the costs of those future efforts.  And, sorry, I don't have a pull request that makes it all better. :)
+My point is that the programming culture of the community -- our de facto practices -- matter.  We all want the functionality of the software.  But we also have to use, maintain, modify and extend it to meet new needs and our coding patterns determine the costs of those future efforts.  
+
+And, sorry, I don't have a pull request that makes it all better. :)
