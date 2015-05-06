@@ -5,6 +5,9 @@ Pages for development projects of Duke University Libraries.
 
 ## Getting Started
 
+### Prerequisite(s)
+1. node.js (I installed with using `sudo yum install npm` on *libcms-dev-01*)
+
 First, clone this repository:
 `git clone git@github.com:duke-libraries/duke-libraries.github.io.git`
 
