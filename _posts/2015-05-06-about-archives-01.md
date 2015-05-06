@@ -3,6 +3,7 @@ layout: post
 title: Accessing the Private 'Archives-01' VM
 author: Derrek Croney
 tags: vm oit archives
+category: vm
 ---
 # archives-01 Secure VM Environment
 
