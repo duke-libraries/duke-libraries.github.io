@@ -6,7 +6,9 @@ Pages for development projects of Duke University Libraries.
 ## Getting Started
 
 ### Prerequisite(s)
-1. node.js 
+1. node.js
+
+ Optional, but needed if Twitter Bootstrap framework is used for look and feel.
 
  On **libcms-dev-01**, I installed with using `sudo yum install npm`
 
