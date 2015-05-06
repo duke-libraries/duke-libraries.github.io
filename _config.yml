@@ -6,3 +6,10 @@ defaults:
     values:
       layout: "post"
       category: "blog"
+authors:
+  derrekc:
+    display_name: Derrek Croney
+    email: derrek.croney@duke.edu
+    twitter: derreklemar
+    github: derrekc
+
