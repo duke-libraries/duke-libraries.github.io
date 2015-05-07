@@ -6,11 +6,10 @@ Pages for development projects of Duke University Libraries.
 ## Getting Started
 
 ### Prerequisite(s)
-1. node.js and Node Package Manager
+1. Ruby
+2. Bundler
 
- Optional, but needed if Twitter Bootstrap framework is used for look and feel.
-
- On **libcms-dev-01**, I installed with using `sudo yum install npm` -- node.js was installed via dependency.
+ `gem install bundler`
 
 ### First...
 Clone our repository:
