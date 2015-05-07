@@ -14,7 +14,7 @@ authors:
     github: derrekc
 
 sass:
-	sass_dir:	_sass
+  sass_dir:	_sass
 
 markdown: redcarpet
 
