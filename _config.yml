@@ -13,3 +13,9 @@ authors:
     twitter: derreklemar
     github: derrekc
 
+sass:
+	sass_dir:	_sass
+
+markdown: redcarpet
+
+highlighter: pygments
