@@ -5,7 +5,6 @@ author: Derrek Croney
 tags: vm oit archives
 category: vm
 ---
-# Access to archives-01 Secure VM
 
 The `archives-01` VM is like most of DUL's VM environments, except that it resides on OIT's Protected Network 
 because of the presence of secure data.
