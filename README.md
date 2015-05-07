@@ -6,10 +6,13 @@ Pages for development projects of Duke University Libraries.
 ## Getting Started
 
 ### Prerequisite(s)
+These are the technologies you'll need in order to run Jekyll
 1. Ruby
 2. Bundler
 
  `gem install bundler`
+
+Now that we have those in place, let's set up the blogging environment.
 
 ### First...
 Clone our repository:
