@@ -1,5 +1,57 @@
 ---
 ---
 
+$gray-base:				#000;
+$gray-darker:			lighten($gray-base, 13.5%);
+$gray-dark:				lighten($gray-base, 20.0%);
+$gray:						lighten($gray-base, 33.5%);
+$gray-light:			lighten($gray-base, 60.0%);
+$gray-lighter:		lighten($gray-base, 93.5%);
+
+$brand-primary:         #003366;
+$brand-success:         lighten(#A1B70D, 6.5%);
+$brand-info:            lighten(#0680CD, 13.0%);
+$brand-warning:         lighten(#F09905, 7.5%);
+$brand-danger:          lighten(#CC3300, 6.5%);
+
+$navbar-height: 90px;
+
+$navbar-default-color:             #ddd;
+$navbar-default-bg:                $brand-primary;
+$navbar-default-border:            darken($navbar-default-bg, 6.5%);
+
+// Navbar links
+$navbar-default-link-color:                #ddd;
+$navbar-default-link-hover-color:          #fff;
+$navbar-default-link-hover-bg:             darken($navbar-default-bg, 10%);
+$navbar-default-link-active-color:         #fff;
+$navbar-default-link-active-bg:            darken($navbar-default-bg, 10%);
+$navbar-default-link-disabled-color:       #ddd;
+$navbar-default-link-disabled-bg:          transparent;
+
+// Navbar brand label
+$navbar-default-brand-color:               $navbar-default-link-color;
+$navbar-default-brand-hover-color:         #fff;
+$navbar-default-brand-hover-bg:            none;
+
+// Navbar toggle
+$navbar-default-toggle-hover-bg:           darken($navbar-default-bg, 10%);
+$navbar-default-toggle-icon-bar-bg:        #fff;
+$navbar-default-toggle-border-color:       darken($navbar-default-bg, 10%);
+
+
+@import "bootstrap-sprockets";
 @import "bootstrap";
 
+.navbar-header .logo.navbar-btn {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.navbar {
+  @include gradient-vertical($brand-primary, darken($brand-primary, 15.0%));
+}
+body {
+	background: #e7e7e7 url(../images/body-bg.png) 0 0 repeat;
+  padding-top: 110px;
+}

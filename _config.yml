@@ -12,6 +12,9 @@ authors:
     email: derrek.croney@duke.edu
     twitter: derreklemar
     github: derrekc
+  
+  dc:
+    display_name: David Chandek-Stark
 
 sass:
   sass_dir:	_sass
