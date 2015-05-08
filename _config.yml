@@ -19,6 +19,8 @@ authors:
 sass:
   sass_dir:	_sass
 
-markdown: redcarpet
+markdown: kramdown
+kramdown:
+  input: GFM
 
-highlighter: pygments
+highlighter: rouge
