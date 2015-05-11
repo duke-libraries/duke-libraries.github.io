@@ -61,6 +61,13 @@ $navbar-default-toggle-border-color:       darken($navbar-default-bg, 10%);
 .navbar {
   @include gradient-vertical($brand-primary, darken($brand-primary, 15.0%));
 }
+.navbar-brand {
+  h2, h3 {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+
 body {
 	background: #e7e7e7 url(../images/body-bg.png) 0 0 repeat;
   padding-top: 110px;
