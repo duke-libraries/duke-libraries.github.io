@@ -6,30 +6,28 @@ tags: linux ArchivesSpace
 category: ArchivesSpace
 ---
 
-ArchivesSpace is the system selected by Rubenstein Technical Services (aka RTS) to replace Archivists Toolkit to 
-facilitate the management of Digital Collection Finding Aids.
-
-Contact Library ITS regarding the names of our production and development servers.
+ArchivesSpace is the system selected by Rubenstein Technical Services (aka RTS) to replace Archivists Toolkit to facilitate the management of Digital Collection Finding Aids.
 
 ### Setting Up ArchivesSpace (aka Upgrading ArchivesSpace)
+
 When notified by Rubenstein Technical Services to upgrade the ArchivesSpace software, these are the steps I currently perform:
 
 #### Downloading latest software
+
 Unless instructed otherwise by RTS, the latest version of ArchivesSpace is located here:
 [https://github.com/archivesspace/archivesspace/releases]()
 
-Look for a file whose name resembles this pattern: `archivesspace-vX.X.X.zip` (where X.X.X represents a version number).  When located, 
-use either 'wget' or 'curl' to download it directly to the server:
+Look for a file whose name resembles this pattern: `archivesspace-vX.X.X.zip` (where X.X.X represents a version number).  When located, use either 'wget' or 'curl' to download it directly to the server:
 
 Let's take version 1.2.0 as an example:
 
-~~~ bash
+{% highlight bash %}
 curl -o archivesspace.zip https://github.com/archivesspace/archivesspace/releases/download/v1.2.0/archivesspace-v1.2.0.zip
-~~~
+{% endhighlight %}
 
 On the production server, the complete process (including stopping the current service) looks like this:
 
-{% highlight bash %}
+{% highlight bash linenos %}
 sudo -u webadmin -i
 cd /srv/apps/archivesspace
 ./archivesspace.sh stop
@@ -44,14 +42,13 @@ ln -s archivesspace-1.2.0 archivesspace
 {% endhighlight %}
 
 #### Configuring the software
-Following the directions outlined in the README ([located here](https://github.com/archivesspace/archivesspace)) will 
-make it easy to install and configure the software.
+Following the directions outlined in the README ([located here](https://github.com/archivesspace/archivesspace)) will make it easy to install and configure the software.
 
 That said, we have some minor tweaks of our own, particularly the assigned ports:
 
-```ruby
+{% highlight ruby linenos %}
 AppConfig[:backend_url] = "http://localhost:9089"
 AppConfig[:frontend_url] = "http://localhost:9080"
 AppConfig[:solr_url] = "http://localhost:9090"
 AppConfig[:public_url] = "http://localhost:9081"
-```
+{% endhighlight %}
