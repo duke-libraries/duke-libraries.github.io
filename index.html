@@ -1,14 +1,15 @@
 ---
-layout: default
-title: Coding Duke University Libraries
+layout: front
+title: Home
 ---
 
 <h2>Articles</h2>
 
-<ul class="posts">
-  {% for post in site.posts %}
+<ul class="posts list-unstyled">
+  {% for post in site.posts limit: 5%}
     <li>
-	  <a href="{{ post.url }}">{{ post.title }}</a> &mdash; {{ post.author }} / {{ post.date | date_to_string }}
+	  <a href="{{ post.url }}"><strong>{{ post.title }}</strong></a> &mdash; <small>{{ post.author }} / {{ post.date | date_to_string }}</small><br />
+	  {{ post.excerpt }}
     </li>
   {% endfor %}
 </ul>

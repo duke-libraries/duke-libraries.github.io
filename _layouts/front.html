@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  {% include head_main.html %}
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+		{% include navbar.html %}
+		
+    <div class="container">
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <!--div class="jumbotron">
+        <h1>The Blue Devil in The Details</h1>
+        <p>
+          <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
+        </p>
+      </div-->
+
+    </div> <!-- /container -->
+    
+    <div class="main-container container">
+    	<div class="row">
+    		<section class="col-md-8">    		
+		  	{{ content }}    			
+    		</section>
+    		<aside class="col-md-4">
+    			<div class="well">
+    				<div>
+    					<h4>The Blue Devil in the Details</h4>
+    					<p>
+    						
+    					</p>
+    				</div>
+    			{% for category in site.categories limit: 5 %}
+    				<span>{{ category | first }}</span><br />
+    			{% endfor %}
+    			</div>
+    		</aside>
+    	</div>
+    </div>
+
+		{% include footer.html %}
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/bootstrap-sprockets.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
