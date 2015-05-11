@@ -1,3 +1,6 @@
+name: "Coding Duke University Libraries"
+description: "Technical Blog by Duke University Libraries developers"
+
 defaults:
   -
     scope:
@@ -6,6 +9,7 @@ defaults:
     values:
       layout: "post"
       category: "blog"
+      
 authors:
   derrekc:
     display_name: Derrek Croney
