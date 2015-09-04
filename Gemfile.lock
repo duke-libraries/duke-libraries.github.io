@@ -157,3 +157,6 @@ DEPENDENCIES
   bootstrap-sass (>= 3.3.4)
   github-pages
   sass-rails (>= 3.2)
+
+BUNDLED WITH
+   1.10.2

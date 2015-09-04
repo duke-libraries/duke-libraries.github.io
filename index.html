@@ -7,22 +7,21 @@ title: Home
 
 <ul class="posts list-unstyled">
   {% for post in site.posts limit: 5%}
-    <li>
-	  <a href="{{ post.url }}"><strong>{{ post.title }}</strong></a> &mdash; <small>{{ post.author }} / {{ post.date | date_to_string }}</small><br />
-	  {{ post.excerpt }}
-    </li>
+  <li>
+    <a href="{{ post.url }}"><strong>{{ post.title }}</strong></a> &mdash; <small>{{ post.author }} / {{ post.date | date_to_string }}</small><br />
+    {{ post.excerpt }}
+  </li>
   {% endfor %}
 </ul>
 
+<!--
 <h2>Documentation and Code</h2>
-
 <ul>
   <li><a href="https://github.com/duke-libraries">Duke Libraries GitHub organization</a></li>
   <li><a href="https://github.com/duke-libraries/duke-libraries.github.io/wiki">Wiki</a></li>
 </ul>
+-->
 
-<!--
 <section id="downloads" class="clearfix">                                                                      
   <a href="https://github.com/duke-libraries" id="view-on-github" class="button"><span>DUL on GitHub</span></a>
 </section> 
--->

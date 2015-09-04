@@ -7,7 +7,7 @@
   <body>
 
     <!-- Fixed navbar -->
-		{% include navbar.html %}
+    {% include navbar.html %}
 		
     <div class="container">
 
@@ -22,27 +22,29 @@
     </div> <!-- /container -->
     
     <div class="main-container container">
-    	<div class="row">
-    		<section class="col-md-10">    		
-		  	{{ content }}    			
-    		</section>
-    		<aside class="col-md-2">
-    			<div class="well">
-    				<div>
-    					<h4>The Blue Devil in the Details</h4>
-    					<p>
-    						
-    					</p>
-    				</div>
-    			{% for category in site.categories limit: 5 %}
-    				<span>{{ category | first }}</span><br />
-    			{% endfor %}
-    			</div>
-    		</aside>
-    	</div>
+      <div class="row">
+    	<section class="col-md-8">    		
+	  {{ content }}    			
+    	</section>
+    	<aside class="col-md-4">
+	  <!--
+    	  <div class="well">
+    	    <div>
+    	      <h4>The Blue Devil in the Details</h4>
+    	      <p>
+    		
+    	      </p>
+    	    </div>
+    	    {% for category in site.categories limit: 5 %}
+    	    <span>{{ category | first }}</span><br />
+    	    {% endfor %}
+    	  </div>
+	  -->
+    	</aside>
+      </div>
     </div>
 
-		{% include footer.html %}
+    {% include footer.html %}
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
