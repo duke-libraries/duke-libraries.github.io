@@ -7,6 +7,29 @@ tags: ruby solr
 
 Solr queries are expressed as URL query strings which makes them difficult to read and comprehend, not to mention, construct.  In order to encapsulate these query strings into Query objects, I have developed a QueryBuilder with chainable methods that hopefully also makes the query construction process a bit easier.
 
+Instead	of writing this	query string:
+
+	fq={!term f=foo}bar&fq={!term f=spam}eggs&fq=stuff:(dog OR cat OR bird)&rows=1000&fl=id,foo,bar,stuff
+
+or building this hash:
+
+{% highlight ruby %}
+{ fq: ["{!term f=foo}bar", "{!term f=spam}eggs", "stuff:(dog OR cat OR bird)"],
+  fl: "id,foo,bar,stuff",
+  rows: 1000
+}
+{% endhighlight %}
+
+I'd rather do this:
+
+{% highlight ruby %}
+QueryBuilder.build do |query|
+  query.where("foo"=>"bar", "spam"=>"eggs", "stuff"=>["dog", "cat", "bird"])
+       .fields("id", "foo", "bar", "stuff")
+       .limit(1000)
+end
+{% endhighlight %}
+
 Before presenting the QueryBuilder or the Query class, let's look at the basic components of a query, which I have called `QueryValue`, `QueryClause`, and `Filter`.
 
 ### QueryValue
@@ -137,4 +160,81 @@ class Filter
   end
 
 end
-{% endhighlight %}  
+{% endhighlight %} 
+
+### QueryBuilder
+
+{% highlight ruby %}
+class QueryBuilder
+
+    def self.build
+      builder = new
+      yield builder
+      builder.query
+    end
+
+    def initialize
+      @q       = nil
+      @fields  = [ ]
+      @filters = [ ]
+      @sort    = [ ]
+      @rows    = nil
+    end
+
+    def query
+      Query.new.tap do |qry|
+        instance_variables.each do |var|
+          qry.instance_variable_set(var, instance_variable_get(var))
+        end
+      end
+    end
+
+    def id(pid)
+      q QueryClause.id(pid)
+      limit 1
+    end
+
+    def filter(*fltrs)
+      @filters.push *fltrs
+      self
+    end
+
+    def fields(*flds)
+      @fields.push *flds
+      self
+    end
+
+    def limit(num)
+      @rows = num
+      self
+    end
+
+    def order_by(field, order)
+      @sort << [field, order].join(" ")
+      self
+    end
+
+    def asc(field)
+      order_by field, "asc"
+    end
+
+    def desc(field)
+      order_by field, "desc"
+    end
+
+    def q(q)
+      @q = q
+      self
+    end
+
+    protected
+
+    def method_missing(name, *args, &block)
+      if Filter.respond_to? name
+        return filter Filter.send(name, *args, &block)
+      end
+      super
+    end
+
+end
+{% endhighlight %}
