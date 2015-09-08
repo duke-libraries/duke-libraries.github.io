@@ -1,27 +1,55 @@
----
-layout: front
-title: Home
----
+<!DOCTYPE html>
+<html>
 
-<h2>Articles</h2>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="duke-libraries.github.io : The Blue Devil is in the details">
 
-<ul class="posts list-unstyled">
-  {% for post in site.posts limit: 5%}
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>duke-libraries.github.io</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/duke-libraries">View on GitHub</a>
+
+          <h1 id="project_title">duke-libraries.github.io</h1>
+          <h2 id="project_tagline">The Blue Devil is in the details</h2>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a id="articles" class="anchor" href="#articles" aria-hidden="true"><span class="octicon octicon-link"></span></a>Articles</h2>
+
+<ul>
+  {% for post in site.posts %}
   <li>
-    <a href="{{ post.url }}"><strong>{{ post.title }}</strong></a> &mdash; <small>{{ post.author }} / {{ post.date | date_to_string }}</small><br />
-    {{ post.excerpt }}
+    <a href="%7B%7B%20post.url%20%7D%7D"><strong>{{ post.title }}</strong></a>
+    |
+    <em>{{ post.date | date_to_string }}</em>
   </li>
   {% endfor %}
 </ul>
+      </section>
+    </div>
 
-<!--
-<h2>Documentation and Code</h2>
-<ul>
-  <li><a href="https://github.com/duke-libraries">Duke Libraries GitHub organization</a></li>
-  <li><a href="https://github.com/duke-libraries/duke-libraries.github.io/wiki">Wiki</a></li>
-</ul>
--->
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
 
-<section id="downloads" class="clearfix">                                                                      
-  <a href="https://github.com/duke-libraries" id="view-on-github" class="button"><span>DUL on GitHub</span></a>
-</section> 
+    
+
+  </body>
+</html>
