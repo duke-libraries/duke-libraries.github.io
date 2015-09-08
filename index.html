@@ -1,55 +1,15 @@
-<!DOCTYPE html>
-<html>
+---
+layout: slate
+---
 
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="duke-libraries.github.io : The Blue Devil is in the details">
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>duke-libraries.github.io</title>
-  </head>
-
-  <body>
-
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/duke-libraries">View on GitHub</a>
-
-          <h1 id="project_title">duke-libraries.github.io</h1>
-          <h2 id="project_tagline">The Blue Devil is in the details</h2>
-
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h2>
-<a id="articles" class="anchor" href="#articles" aria-hidden="true"><span class="octicon octicon-link"></span></a>Articles</h2>
+<h2>Articles</h2>
 
 <ul>
   {% for post in site.posts %}
   <li>
-    <a href="%7B%7B%20post.url%20%7D%7D"><strong>{{ post.title }}</strong></a>
+    <a href="{{ post.url }}"><strong>{{ post.title }}</strong></a>
     |
     <em>{{ post.date | date_to_string }}</em>
   </li>
   {% endfor %}
 </ul>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
-</html>
