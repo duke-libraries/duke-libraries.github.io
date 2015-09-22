@@ -37,7 +37,8 @@ An **agent** is a entity (person or group) to whom a role is "granted".
 
 - A **Person** agent (e.g., foaf:Person) represents an individual.
 - A **Group** agent (e.g., foaf:Group) represents a set of (zero or more) persons.
-- A user is represented by one Person agent and zero or more Group agents (of which its person is member).
+- An authenticated user is represented by one Person agent and zero or more Group agents.
+- An anonymous user may be represented by group agents (e.g., Hydra's "public" group).
 
 The **scope** of a role assertion defines the object(s) to which its privileges apply.
 
@@ -150,7 +151,7 @@ end
 
 #### Agents
 
-So, how is an actual user associated with a role?  As mentioned above, a user of the system is represented by one or more "agents" -- a singular "person" agent and multiple (0-N) "group" agents, or simply "groups".  In our implementation all agents are represented by strings. A person is represented in the form of an email address. A group is represented by a string that is not of the form of an email address; this could be a simple name like "admins", or an LDAP group name, etc.
+So, how is an actual user associated with a role?  As mentioned above, a user of the system is represented by "agents" -- a singular "person" agent (if the user is authenticated) and multiple (0-N) "group" agents, or simply "groups".  In our implementation all agents are represented by strings. A person is represented in the form of an email address. A group is represented by a string that is not of the form of an email address; this could be a simple name like "admins", or an LDAP group name, etc.
 
 A role set may be queried for a the list of roles where the agent is one of the user's agents.  Thus, the "effective roles" for a user is determined by finding the matching resource-scoped roles on the object, and merging that set with the matching policy-scoped roles "inherited" by the object through a policy relationship to another object:
 
@@ -158,13 +159,13 @@ A role set may be queried for a the list of roles where the agent is one of the 
 class EffectiveRoles < SimpleDelegator
   # @param obj [Object] an object that receives :roles and returns a RoleSet
   # @param agents [String, Array<String>] agent(s) to match roles
-  # @return [Ddr::Auth::Roles::RoleSetQuery]
+  # @return [RoleSetQuery]
   def self.call(obj, agents)
     new(obj).call(agents)
   end
 
   # @param agents [String, Array<String>] agent(s) to match roles
-  # @return [Ddr::Auth::Roles::RoleSetQuery]
+  # @return [RoleSetQuery]
   def call(agents)
     ResourceRoles.call(self)
       .merge(InheritedRoles.call(self))
@@ -172,3 +173,32 @@ class EffectiveRoles < SimpleDelegator
   end
 end
 {% endhighlight %}
+
+Once we have determine the effective roles for an object given a list of agents, it's a short step to the "effective permissions" which are used in the authorization context:
+
+{% highlight ruby %}
+class EffectivePermissions
+  # @param obj [Object] an object that receives :roles and returns a RoleSet
+  # @param agents [String, Array<String>] agent(s) to match roles
+  # @return [Array<Symbol>]    
+  def self.call(obj, agents)
+    EffectiveRoles.call(obj, agents).permissions
+  end
+end
+{% endhighlight %}
+
+This code returns the union of permissions for all of the role in the role set that is returned by `EffectivePermissions.call`.
+
+#### AuthContext
+
+In our implementation, since we wish to consider the request environment (e.g., IP address) as part of the authorization context in addition to the authenticated user information, we actually use an `AuthContext` object more or less in the role of "user".
+
+### Story
+
+We may now consider an authorization story:
+
+- A request for a resource requiring authorization is made
+- The agents associated with the authorization context (user + environment) are determined
+- The effective roles for the agents on the resource are determined
+- The effective permissions for the agents on the resource are determined from the effective roles
+- If effective permissions include the permission required to authorize the action, it is so authorized.
