@@ -62,9 +62,9 @@ class Role < ActiveTriples::Resource
 end
 {% endhighlight %}
 
-The custom RDF vocabulary describes the type and properties of the class:
+The custom RDF vocabulary describes the type and properties of the class (the namespace is not important, but has been left in here for clarity):
 
-{% highlight %}
+{% highlight ruby %}
 module Ddr
   module Vocab
     class Roles < RDF::StrictVocabulary("http://repository.lib.duke.edu/vocab/roles/")
