@@ -62,6 +62,38 @@ class Role < ActiveTriples::Resource
 end
 {% endhighlight %}
 
+The custom RDF vocabulary describes the type and properties of the class:
+
+{% highlight %}
+module Ddr
+  module Vocab
+    class Roles < RDF::StrictVocabulary("http://repository.lib.duke.edu/vocab/roles/")
+
+      term :Role,
+        label: "Role",
+        comment: "An assertion of a role granted to an agent."
+
+      property :hasRole,
+        label: "Has Role",
+        comment: "Asserts the granting of a role on the subject to an agent."
+
+      property :type,
+        label: "Type",
+        comment: "The type of role granted to the agent."
+
+      property :agent,
+        label: "Agent",
+        comment: "The agent to whom the role is granted."
+
+      property :scope,
+        label: "Scope",
+        comment: "The scope within which the role applies."
+
+    end
+  end
+end
+{% endhighlight %}
+
 #### RoleSet
 
 A `RoleSet` is an abstract class representing a collection of role assertions. The principal APIs evoke SQL semantics:
