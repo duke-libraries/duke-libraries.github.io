@@ -196,11 +196,11 @@ The `scope` of a role is a simple string property in our implementation, either 
 
 #### Agent
 
-In our implementation the `agent` property of a role is represented by strings. A "person" agent is represented in the form of an email address. A group is represented by a string that is not of the form of an email address; this could be a simple name like "admins", or an LDAP group name, etc. We considered the possibility of representing the agent with a URI or a nested node, but this approach would have drawn us into other concerns not specifically germane to role-based access control and for which we were not prepared at the time.
+The `agent` property of a role is represented by strings. A "person" agent is represented in the form of an email address. A group is represented by a string that is not of the form of an email address; this could be a simple name like "admins", or an LDAP group name, etc. We considered the possibility of representing the agent with a URI or a nested node, but this approach would have drawn us into other concerns not specifically germane to role-based access control and for which we were not prepared at the time.
 
 ### AuthContext
 
-In our implementation, since we wish to consider the request environment (e.g., IP address) as part of the authorization context in addition to the authenticated user information, we use an `AuthContext` object more or less in the functional role of "user". The object simply wraps a user (which may be `nil` when unauthenticated) and request environment object (i.e., Rails's `request.env`). Thus, the agents of an auth context consist of the user's person agent (if authenticated) and group agents determined from the authenticated user information (if present) and the request environment.
+Since we wish to consider the request environment (e.g., IP address) as part of the authorization context in addition to the authenticated user information, we use an `AuthContext` object more or less in the functional role of "user". The object simply wraps a user (which may be `nil` when unauthenticated) and request environment object (i.e., Rails's `request.env`). Thus, the agents of an auth context consist of the user's person agent (if authenticated) and group agents determined from the authenticated user information (if present) and the request environment.
 
 ### EffectiveRoles and EffectivePermissions
 
@@ -240,7 +240,7 @@ end
 
 This code returns the union of permissions for all of the role in the role set that is returned by `EffectivePermissions.call`.
 
-### Story
+### Authorization Story
 
 We may now consider an authorization story:
 
@@ -248,6 +248,10 @@ We may now consider an authorization story:
 - The agents associated with the authorization context (user + environment) are determined
 - The effective roles for the agents on the resource are determined
 - The effective permissions for the agents on the resource are determined from the effective roles
-- If effective permissions include the permission required to authorize the action, it is so authorized.
+- If the effective permissions include the permission required to authorize the action, it is so authorized.
 
 And everyone lived happily ever after.
+
+### Search and Discovery
+
+How does role-based access control fit into Hydra resource discovery?  Fortunately, `hydra-access-control` provides overridable methods that we can use to inject our new behaviors into the authorization process.  In `gated_discovery_filters` we apply Solr filter queries based on our indexing of role assertions. If you're interested in the details of our specific approach, take a look at the source code of the [RoleBasedAccessControlsEnforcement](https://github.com/duke-libraries/ddr-models/blob/develop/lib/ddr/auth/role_based_access_controls_enforcement.rb) module.
