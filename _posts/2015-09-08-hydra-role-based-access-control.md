@@ -153,7 +153,7 @@ So, how is an actual user associated with a role?  As mentioned above, a user of
 
 A role set may be queried for a the list of roles where the agent is one of the user's agents.  Thus, the "effective roles" for a user is determined by finding the matching resource-scoped roles on the object, and merging that set with the matching policy-scoped roles "inherited" by the object through a policy relationship to another object:
 
-{% highlight %}
+{% highlight ruby %}
 class EffectiveRoles < SimpleDelegator
   # @param obj [Object] an object that receives :roles and returns a RoleSet
   # @param agents [String, Array<String>] agent(s) to match roles
