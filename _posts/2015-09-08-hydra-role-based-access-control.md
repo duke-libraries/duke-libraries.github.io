@@ -21,13 +21,11 @@ The terminology of roles is admittedly (and regrettably) overloaded.  Let's esta
 
 A **role** expresses a role assertion, which is a typed, scoped relation between an agent and a resource.
 
-- A role is an instance of the `Role` class, having `role_type`, `agent`, and `scope` attributes.
 - A **role is "granted"** when an association is made between a role object and a repository object.
 - A **role is "revoked"** when as association between a role object and a repository object is removed (deleted).
 
 A **role type** defines a categorical role assertion -- e.g., Curator, Editor, Viewer.
 
-- A role type is an instance of the `RoleType` class.
 - Role types are independent (not hierarchical or related by some kind of inheritance).
 - Each role type defines the permissions it will convey when asserted through a role assignment.
 
@@ -40,8 +38,8 @@ An **agent** is a entity (person or group) to whom a role is "granted".
 
 The **scope** of a role assertion defines the object(s) to which its privileges apply.
 
-- In *resource scope*, the role applies directly to the object which it is associated.
-- In *policy scope* the role applies indirectly to the objects *governed by* (via a policy relationship) the object with which the role is associated.  In a Hydra context, policy scope makes sense only on AdminPolicy objects or other administrative objects that enforce control over other objects.
+- In **resource scope**, the role applies directly to the object which it is associated.
+- In **policy scope** the role is "inherited" by objects "govened by" the object.  In a Hydra context, policy scope makes sense only on AdminPolicy objects or other administrative objects that enforce access control over other objects.
 
 We can represent the relationships between a repository object, a role and its parts, and the permissions the role ultimately conveys:
 
@@ -50,6 +48,19 @@ We can represent the relationships between a repository object, a role and its p
 ### Implementation
 
 Our approach is designed to be loosely coupled with the repository implementation; however, it was developed on a Fedora 3-based Hydra stack -- i.e., hydra-head 7.x, active-fedora 7.x and ActiveTriples 0.2.3 (the highest version compatible with the other dependencies).
+
+#### Role
+
+The `Role` is implemented as an `ActiveTriples::Resource`:
+
+{% highlight ruby %}
+class Role < ActiveTriples::Resource
+  configure type: Ddr::Vocab::Roles.Role
+  property :role_type, predicate: Ddr::Vocab::Roles.type
+  property :agent, predicate: Ddr::Vocab::Roles.agent
+  property :scope, predicate: Ddr::Vocab::Roles.scope
+end
+{% endhighlight %}
 
 #### RoleSet
 
