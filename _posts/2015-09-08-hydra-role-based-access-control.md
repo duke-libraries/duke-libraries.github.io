@@ -19,16 +19,13 @@ With the introduction of roles we can manage both of these issues.  We don't nee
 
 ### Terminology and Concepts
 
-The terminology of roles is admittedly (and regrettably) overloaded.  First we need to distinguish between a "role" as an assertion on a specific resource and a "role type" as an category of role assertions.
+The terminology of roles is admittedly (and regrettably) overloaded.  Let's establish some definitions.
 
-A **role** expresses a role assertion, which is a typed relation between an agent and a resource.
+A **role** expresses a role assertion, which is a typed, scoped relation between an agent and a resource.
 
 - A role is an instance of the `Role` class, having `role_type`, `agent`, and `scope` attributes.
 - A **role is "granted"** when an association is made between a role object and a repository object.
 - A **role is "revoked"** when as association between a role object and a repository object is removed (deleted).
-- The **scope** of a role assertion defines the object(s) to which its privileges apply.
-  - In *resource scope*, the role applies directly to the object which it is associated.
-  - In *policy scope* the role applies indirectly to the objects *governed by* (via a policy relationship) the object with which the role is associated.  In a Hydra context, policy scope makes sense only on AdminPolicy objects or other administrative objects that enforce control over other objects.
 
 A **role type** defines a categorical role assertion -- e.g., Curator, Editor, Viewer.
 
@@ -41,6 +38,15 @@ An **agent** is a entity (person or group) to whom a role is "granted".
 - A **Person** agent (e.g., foaf:Person) represents an individual.
 - A **Group** agent (e.g., foaf:Group) represents a set of (zero or more) persons.
 - A user is represented by one Person agent and zero or more Group agents (of which its person is member).
+
+The **scope** of a role assertion defines the object(s) to which its privileges apply.
+
+- In *resource scope*, the role applies directly to the object which it is associated.
+- In *policy scope* the role applies indirectly to the objects *governed by* (via a policy relationship) the object with which the role is associated.  In a Hydra context, policy scope makes sense only on AdminPolicy objects or other administrative objects that enforce control over other objects.
+
+We can represent the relationships between a repository object, a role and its parts, and the permissions the role ultimately conveys:
+
+![Roles Diagram](/images/roles.png)
 
 ### Implementation
 
