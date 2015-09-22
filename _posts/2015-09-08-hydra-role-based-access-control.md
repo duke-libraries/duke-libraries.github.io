@@ -5,8 +5,6 @@ author: David Chandek-Stark
 tags: hydra "access control"
 ---
 
-[Note: This article is a work in progress.]
-
 Hydra permissions, which are essentially read/write, appear to follow a file-system paradigm. The more recent interest in the W3C [WebAccessControl](http://www.w3.org/wiki/WebAccessControl) ontology in Fedora 4 continues this aproach. Digital object repositories, however, may require a more extensive set of permissions than those which are sufficient for file systems. In order to manage this complexity, we can employ the concept of a "role" -- in addition to *user* and *group* -- to introduce an abstraction layer between those concrete "agents" and permissions.  These roles help to define responsibilities like "curator" or "contributor" which convey a cluster of permissions that may grow and change over time.
 
 ### What's the Difference Between a Role and a Group?
