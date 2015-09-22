@@ -190,11 +190,21 @@ module RoleTypes
 end
 {% endhighlight %}
 
-#### Agents
+#### Scope
 
-So, how is an actual user associated with a role?  As mentioned above, a user of the system is represented by "agents" -- a singular "person" agent (if the user is authenticated) and multiple (0-N) "group" agents, or simply "groups".  In our implementation all agents are represented by strings. A person is represented in the form of an email address. A group is represented by a string that is not of the form of an email address; this could be a simple name like "admins", or an LDAP group name, etc.
+The `scope` of a role is a simple string property in our implementation, either "resource" or "policy". The default scope of a role is "resource", which means that the role assertion effectively applies to the resource itself. Since we also implement Hydra policy based access control with "admin policy" objects, we use the scope value of "policy" to denote a role to be "inherited" by objects under the policy object's administrative control (via an "isGovernedBy" relationship).
 
-A role set may be queried for a the list of roles where the agent is one of the user's agents.  Thus, the "effective roles" for a user is determined by finding the matching resource-scoped roles on the object, and merging that set with the matching policy-scoped roles "inherited" by the object through a policy relationship to another object:
+#### Agent
+
+In our implementation the `agent` property of a role is represented by strings. A "person" agent is represented in the form of an email address. A group is represented by a string that is not of the form of an email address; this could be a simple name like "admins", or an LDAP group name, etc. We considered the possibility of representing the agent with a URI or a nested node, but this approach would have drawn us into other concerns not specifically germane to role-based access control and for which we were not prepared at the time.
+
+### AuthContext
+
+In our implementation, since we wish to consider the request environment (e.g., IP address) as part of the authorization context in addition to the authenticated user information, we use an `AuthContext` object more or less in the functional role of "user". The object simply wraps a user (which may be `nil` when unauthenticated) and request environment object (i.e., Rails's `request.env`). Thus, the agents of an auth context consist of the user's person agent (if authenticated) and group agents determined from the authenticated user information (if present) and the request environment.
+
+### EffectiveRoles and EffectivePermissions
+
+A role set may be queried (via a `RoleSetQuery` object) for a the list of roles where the agent is one of a list agents, such as that given by an auth context.  Thus, the "effective roles" for a user is determined by finding the matching resource-scoped roles on the object, and merging that set with the matching policy-scoped roles "inherited" by the object through a policy relationship to another object:
 
 {% highlight ruby %}
 class EffectiveRoles < SimpleDelegator
@@ -230,10 +240,6 @@ end
 
 This code returns the union of permissions for all of the role in the role set that is returned by `EffectivePermissions.call`.
 
-#### AuthContext
-
-In our implementation, since we wish to consider the request environment (e.g., IP address) as part of the authorization context in addition to the authenticated user information, we actually use an `AuthContext` object more or less in the role of "user".
-
 ### Story
 
 We may now consider an authorization story:
@@ -243,3 +249,5 @@ We may now consider an authorization story:
 - The effective roles for the agents on the resource are determined
 - The effective permissions for the agents on the resource are determined from the effective roles
 - If effective permissions include the permission required to authorize the action, it is so authorized.
+
+And everyone lived happily ever after.
