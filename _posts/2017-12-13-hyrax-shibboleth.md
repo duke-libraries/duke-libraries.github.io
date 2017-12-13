@@ -179,7 +179,7 @@ In our example we assume a Rails production environment under Passenger + Apache
 
 The relevant bits of the virtual host configuration (not intended as a complete Rails/Passenger config example):
 
-```
+{% highlight apache %}
 # The Location block and RewriteRule just prevent problems :)
 RewriteEngine on
 <Location /Shibboleth.sso>
@@ -195,8 +195,8 @@ DocumentRoot /path/to/rails/root/public
   
   # This configuration specifies that mod_shib is enabled
   # but the user is not required to login.
-  # If you want to force login, set requireSession to 1
-  # and use Require directive.
+  # If you want to force login, set ShibRequestSetting requireSession 1
+  # and use a different Require directive.
   # See https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPApacheConfig.
   ShibRequestSetting requireSession 0 
   Require shibboleth
@@ -219,7 +219,7 @@ Redirect /users/sign_in /users/auth/shibboleth
   # You may want or need to customize the value of the Location header set here
   Header edit Location ^.* /Shibboleth.sso/Logout "expr=%{REQUEST_STATUS} == 302"
 </Location>
-```
+{% endhighlight %}
 
 ### nginx Notes
 
@@ -237,6 +237,7 @@ Rack Middleware
 
 {% highlight ruby %}
 # config/initializers/omniauth.rb
+
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :shibboleth, request_type: :header
 end
