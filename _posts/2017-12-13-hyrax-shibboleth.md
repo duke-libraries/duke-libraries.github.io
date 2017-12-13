@@ -67,7 +67,8 @@ config.omniauth :shibboleth, {
 {% endhighlight %}
 
 The `uid_field` mapping lambda indicates that we will use `eppn` if available, or the field `duDukeID` (a custom institutional identifier) otherwise.
-See https://github.com/toyokazu/omniauth-shibboleth#more-flexible-attribute-configuration for details on this type of configuration.
+See [omniauth-shibboleth documentation](https://github.com/toyokazu/omniauth-shibboleth#more-flexible-attribute-configuration)
+for details on this type of configuration.
 If you just want to use `eppn` as the uid, then write `uid_field: "eppn"`, which is also the omniauth-shibboleth default.
 The `name_field` mapping to `displayName` is the default for omniauth-shibboleth, but we'll be explicit here.
 
@@ -98,7 +99,7 @@ end
 In order to route requests properly to our new controller, we need to update our routes config:
 
 {% highlight ruby %}
-# config/routes/rb
+# config/routes.rb
 
 devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 {% endhighlight %}
@@ -150,8 +151,8 @@ In order to integrate smoothly with Hyrax and its dependencies (e.g., Blacklight
 # user class to get a user-displayable login/identifier for
 # the account.
 def to_s
-  # We prefer the user's actual name ("David Chandek-Stark") to their uid, if available.
-  # This is, of course, up to you.
+  # We prefer the user's actual name ("David Chandek-Stark") to their uid,
+  # if available. This is of course up to you.
   display_name || uid
 end
 
@@ -170,7 +171,7 @@ validates :uid, presence: true, uniqueness: true
 
 ### Views
 
-For the Shibboleth integration piece itself, we don't need to customize any of the Devise views because users on our site will not use registration or login forms provided by our application. However, if we retain `database_authenticatable` functionality for development and testing, then we need to update the default views to work with the changes we have made.  Follow the Devise documentation for generating views to customize.  You will probably have to replace references to `email` with `uid`, or add `uid` as a required field to `devise/sessions/new.html.erb`, etc.  Note that if you generate views in the `users` scope, you will also need to update the routing configuration.
+For the Shibboleth integration piece itself, we don't need to customize any of the Devise views because users on our site will not use registration or login forms provided by our application. However, if we retain `database_authenticatable` functionality for development and testing, then we need to update the default views to work with the changes we have made.  Follow the Devise documentation for generating views to customize.  You will have to replace references to `email` with `uid`, or add `uid` as a required field to `devise/sessions/new.html.erb`, etc.  Note that if you generate views in the `users` scope, you will also need to update the routing configuration.
 
 ### The Web Server
 
@@ -219,5 +220,30 @@ Redirect /users/sign_in /users/auth/shibboleth
   Header edit Location ^.* /Shibboleth.sso/Logout "expr=%{REQUEST_STATUS} == 302"
 </Location>
 ```
+
+### nginx Notes
+
+nginx + shib + omniauth config may require setting the omniauth-shibboleth option `request_type` to `:header` in one or more configuration files:
+
+Devise
+
+{% highlight ruby %}
+# config/initializers/devise.rb
+
+config.omniauth :shibboleth, request_type: :header, ... 
+{% endhighlight %}
+
+Rack Middleware
+
+{% highlight ruby %}
+# config/initializers/omniauth.rb
+Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :shibboleth, request_type: :header
+end
+{% endhighlight %}
+
+(Credit: eefahy)
+
+### The End
 
 Enjoy!
