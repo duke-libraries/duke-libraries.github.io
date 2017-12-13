@@ -56,14 +56,11 @@ config.strip_whitespace_keys = [:uid]
 # up on your models and hooks.
 # ...
 require 'omniauth-shibboleth'
-config.omniauth :shibboleth, {
+config.omniauth :shibboleth, 
 		  uid_field: lambda { |rpm| rpm.call("eppn") || rpm.call("duDukeID") },
 		  name_field: "displayName",
-		  info_fields: {
-		    email: "mail",
-		  },
-		  extra_fields: ["duDukeID"],
-		}
+		  info_fields: { email: "mail" },
+		  extra_fields: ["duDukeID"]		
 {% endhighlight %}
 
 The `uid_field` mapping lambda indicates that we will use `eppn` if available, or the field `duDukeID` (a custom institutional identifier) otherwise.
@@ -72,38 +69,6 @@ for details on this type of configuration.
 If you just want to use `eppn` as the uid, then write `uid_field: "eppn"`, which is also the omniauth-shibboleth default.
 The `name_field` mapping to `displayName` is the default for omniauth-shibboleth, but we'll be explicit here.
 
-### The Controller
-
-Now we need to implement the `shibboleth` action in `OmniauthCallbacksController`.  This is the bit that uses the authentication information from Shibboleth
-to sign in with Devise.
-
-We can generate the controller in the usual way with the Devise generator `rails generate devise:controllers users`. At the moment we only care about `OmniauthCallbacksController`; you may discard the other generated controllers as you see fit.
-
-After adding the new action, here's our updated controller:
-
-{% highlight ruby %}
-# app/controllers/users/omniauth_callbacks_controller.rb
-
-class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-
-  def shibboleth
-    # We have to implement this class method in our User model, below.
-    user = resource_class.from_omniauth(request.env["omniauth.auth"])
-    set_flash_message :notice, :success, kind: "Duke"
-    sign_in_and_redirect user
-  end
-
-end
-{% endhighlight %}
-
-In order to route requests properly to our new controller, we need to update our routes config:
-
-{% highlight ruby %}
-# config/routes.rb
-
-devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
-{% endhighlight %}
-
 ### The Model
 
 In our `User` model we first need to activate the Devise omniauth module and specify the omniauth provider:
@@ -111,15 +76,14 @@ In our `User` model we first need to activate the Devise omniauth module and spe
 {% highlight ruby %}
 # app/models/user.rb
 
-devise :database_authenticatable, :registerable, :recoverable,
-       :rememberable, :trackable, :validatable,
+devise :database_authenticatable, :registerable, # ... other modules
        :omniauthable, omniauth_providers: [:shibboleth]							       
 {% endhighlight %}
 
-Note that we are leaving `:database_authenticatable` active in order to support development and testing requiring user authentication outside of a Shibboleth
-integration environment (e.g., workstation, CI, etc.).  The other modules shown may be part of the default Devise installation but are not significant here.
+Next we need to implement a class method that returns a User instance to sign in.
+We will use this method in our custom controller (below) to get/create the local user account to be signed in
+for the remote user authenticated via Shibboleth.
 
-Next we need to implement a class method in our `User` model that returns a User instance to sign in.
 There's nothing magic about the method name `from_omniauth`; choose a different name if you like. 
 We will assume that "registration" of new users via Shibboleth authentication is automatic -- i.e.,
 that we will create a new `User` if necessary for the provided credentials.
@@ -129,7 +93,6 @@ that we will create a new `User` if necessary for the provided credentials.
 
 # @param auth [OmniAuth::AuthHash] authenticated user information.
 # @return [User] the authenticated user, possibly a newly created record.
-# @see {Users::OmniauthCallbacksController#shibboleth}
 def self.from_omniauth(auth)
   find_or_initialize_by(uid: auth.uid).tap do |user|
     # set a random (unusable) password for a new user
@@ -157,6 +120,7 @@ def to_s
 end
 
 def user_key
+  # This should match Devise's authentication key
   uid
 end
 {% endhighlight %}
@@ -169,9 +133,39 @@ Finally, you may wish to implement validation of the `uid` attribute, although i
 validates :uid, presence: true, uniqueness: true
 {% endhighlight %}
 
-### Views
+### The Controller
 
-For the Shibboleth integration piece itself, we don't need to customize any of the Devise views because users on our site will not use registration or login forms provided by our application. However, if we retain `database_authenticatable` functionality for development and testing, then we need to update the default views to work with the changes we have made.  Follow the Devise documentation for generating views to customize.  You will have to replace references to `email` with `uid`, or add `uid` as a required field to `devise/sessions/new.html.erb`, etc.  Note that if you generate views in the `users` scope, you will also need to update the routing configuration.
+Now we need to implement the `shibboleth` action in `OmniauthCallbacksController`.  This is the bit that uses the authentication information from Shibboleth
+to sign in with Devise.
+
+We can generate the controller in the usual way with the Devise generator `rails generate devise:controllers users`. At the moment we only care about `OmniauthCallbacksController`; you may discard the other generated controllers as you see fit.
+
+After adding the new action, here's our updated controller:
+
+{% highlight ruby %}
+# app/controllers/users/omniauth_callbacks_controller.rb
+
+class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+
+  def shibboleth
+    # We have to implement this class method in our User model, below.
+    user = resource_class.from_omniauth(request.env["omniauth.auth"])
+    set_flash_message :notice, :success, kind: "Duke"
+    sign_in_and_redirect user
+  end
+
+end
+{% endhighlight %}
+
+### The Routes
+
+In order to route requests properly to our new controller, we need to update our routes config:
+
+{% highlight ruby %}
+# config/routes.rb
+
+devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+{% endhighlight %}
 
 ### The Web Server
 
@@ -221,7 +215,7 @@ Redirect /users/sign_in /users/auth/shibboleth
 </Location>
 {% endhighlight %}
 
-### nginx Notes
+#### nginx Notes
 
 nginx + shib + omniauth config may require setting the omniauth-shibboleth option `request_type` to `:header` in one or more configuration files:
 
@@ -245,6 +239,33 @@ end
 
 (Credit: eefahy)
 
+### Development and Testing
+
+For the Shibboleth integration piece itself, we don't need to customize any of the Devise views or controllers
+(other than OmniauthCallbacksController, above) because users on our site will not use registration or login forms
+provided by our application.
+
+However, if we retain `database_authenticatable` and `registerable` functionality for development and testing,
+then we need to update the default views to work with the changes we have made.  Follow the Devise documentation for generating views to customize.  You will have to replace references to `email` with `uid`, or add `uid` as a required field to `devise/sessions/new.html.erb`, etc.  Note that if you generate views in the `users` scope (which should only be necessary if you require multiple authentication scopes), you will also need to update the routing configuration.
+
+Finally, because Hyrax still requires the `email` field by default, you will need to modify the [parameters permitted by Devise controllers](https://github.com/plataformatec/devise#strong-parameters) by adding code such as this to your `ApplicationController`:
+
+{% highlight ruby %}
+# app/controllers/application_controller.rb
+
+before_action :configure_permitted_parameters, if: :devise_controller?
+
+protected
+
+def configure_permitted_parameters
+  devise_parameter_sanitizer.permit(:sign_up, keys: [:email])
+end
+{% endhighlight %}
+
+It is also possible to write integration tests using OminAuth's [test mode and mocking features](https://github.com/omniauth/omniauth/wiki/Integration-Testing), although I have not yet tried to do so with omniauth-shibboleth.
+
 ### The End
 
-Enjoy!
+`rake db:migrate`, reload the web server, and enjoy!
+
+--DCS
