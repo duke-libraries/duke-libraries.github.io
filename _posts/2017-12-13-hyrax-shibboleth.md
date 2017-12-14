@@ -241,12 +241,12 @@ end
 
 ### Development and Testing
 
-For the Shibboleth integration piece itself, we don't need to customize any of the Devise views or controllers
+For the Shibboleth integration piece itself we don't need to customize any of the Devise views or controllers
 (other than OmniauthCallbacksController, above) because users on our site will not use registration or login forms
 provided by our application.
 
 However, if we retain `database_authenticatable` and `registerable` functionality for development and testing,
-then we need to update the default views to work with the changes we have made.  Follow the Devise documentation for generating views to customize.  You will have to replace references to `email` with `uid`, or add `uid` as a required field to `devise/sessions/new.html.erb`, etc.  Note that if you generate views in the `users` scope (which should only be necessary if you require multiple authentication scopes), you will also need to update the routing configuration.
+then we need to update the default views to work with the changes we have made.  Follow the [Devise documentation](https://github.com/plataformatec/devise#configuring-views) for generating views to customize.  You will have to replace references to `email` with `uid`, or add `uid` as a required field to `devise/sessions/new.html.erb`, etc.  Note that if you generate views in the `users` scope (which should only be necessary if you require multiple authentication scopes), you will also need to update the routing configuration.
 
 Finally, because Hyrax still requires the `email` field by default, you will need to modify the [parameters permitted by Devise controllers](https://github.com/plataformatec/devise#strong-parameters) by adding code such as this to your `ApplicationController`:
 
